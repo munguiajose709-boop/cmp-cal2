@@ -4,80 +4,168 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101827">
+<meta name="theme-color" content="#ffffff">
 <title>CMP Cal</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#101827;color:#f1f5f9;font-family:Arial,sans-serif;padding:20px}
-header{text-align:center;margin:20px 0 28px}
-header h1{color:#38bdf8;font-size:30px;margin-bottom:5px}
-header p{color:#94a3b8}
-.card{background:#1e293b;padding:18px;border-radius:16px;margin-bottom:16px}
-h2{font-size:18px;color:#38bdf8;margin-top:0}
-label{display:block;margin:13px 0 6px;color:#cbd5e1}
-input,select{width:100%;padding:13px;border:1px solid #475569;border-radius:9px;background:#0f172a;color:white;font-size:16px}
-button{width:100%;padding:14px;border:0;border-radius:10px;background:#0284c7;color:white;font-size:16px;font-weight:bold;margin-top:15px}
-.result{margin-top:15px;padding:14px;background:#0f172a;border-radius:10px;color:#4ade80;font-size:18px;overflow-wrap:anywhere}
-small{color:#94a3b8}
+body{margin:0;background:#f5f8fc;color:#263548;font-family:Arial,sans-serif}
+header{background:white;padding:24px 18px 18px;border-bottom:1px solid #e5edf5}
+header h1{margin:0;color:#1676b8;font-size:29px}
+header p{margin:6px 0 0;color:#718096;font-size:12px}
+main{padding:16px;max-width:650px;margin:auto}
+.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+.menu button{background:white;color:#2876ae;border:1px solid #dce8f3;padding:14px 8px;border-radius:12px;font-size:13px;font-weight:bold;margin:0}
+.menu button.active{background:#e8f3fc;border:2px solid #2985c3}
+.card{background:white;padding:19px;border:1px solid #e5edf5;border-radius:15px;margin-bottom:15px}
+.card h2{font-size:18px;color:#1676b8;margin:0 0 15px}
+label{display:block;font-size:13px;color:#526477;margin:13px 0 6px}
+input{width:100%;padding:13px;border:1px solid #d6e0ea;border-radius:9px;font-size:16px;background:#fbfdff;color:#263548}
+.action{width:100%;padding:14px;background:#1676b8;color:white;border:0;border-radius:10px;font-size:15px;font-weight:bold;margin-top:17px}
+.result{background:#edf6fd;border-radius:10px;padding:15px;margin-top:15px;color:#176ca7;font-size:17px;font-weight:bold;overflow-wrap:anywhere}
+.note{font-size:12px;color:#748398;line-height:1.5;margin-top:12px}
+.section{display:none}
+.section.active{display:block}
+footer{text-align:center;color:#8493a4;font-size:11px;padding:20px}
 </style>
 </head>
 <body>
+
 <header>
 <h1>CMP Cal</h1>
-<p>Calculadora médica clínica</p>
-<small>Versión 1.0</small>
+<p>CALCULADORA MÉDICA CLÍNICA · VERSIÓN 2.0</p>
 </header>
 
+<main>
+<div class="menu">
+<button class="active" onclick="show('conversion',this)">⚖️ MG ↔ ML</button>
+<button onclick="show('pediatric',this)">👶 Pediatría</button>
+<button onclick="show('fluids',this)">💧 Líquidos</button>
+<button onclick="show('neonatal',this)">🍼 Neonatología</button>
+</div>
+
+<section id="conversion" class="section active">
 <div class="card">
-<h2>1. Conversor mg ↔ mL (cc)</h2>
-<label>Dosis o cantidad (mg)</label>
+<h2>Conversor de mg a mL (cc)</h2>
+<label>Cantidad requerida (mg)</label>
 <input id="mg" type="number" min="0" step="any" placeholder="Ej. 120">
-<label>Concentración del medicamento</label>
-<input id="conc" type="number" min="0" step="any" placeholder="Ej. 120">
+<label>Concentración (mg)</label>
+<input id="concentration" type="number" min="0" step="any" placeholder="Ej. 120">
 <label>Volumen de referencia (mL)</label>
-<input id="vol" type="number" min="0" step="any" value="5">
-<button onclick="convertir()">Calcular mL (cc)</button>
-<div class="result" id="r1">Resultado: pendiente</div>
+<input id="reference" type="number" min="0" step="any" value="5">
+<button class="action" onclick="convert()">CALCULAR VOLUMEN</button>
+<div class="result" id="conversionResult">Resultado: pendiente</div>
+<p class="note">Introduce la concentración tal como aparece en el medicamento. 1 mL equivale a 1 cc.</p>
 </div>
+</section>
 
+<section id="pediatric" class="section">
 <div class="card">
-<h2>2. Dosis por peso</h2>
+<h2>Calculadora de dosis pediátrica</h2>
 <label>Peso del paciente (kg)</label>
-<input id="peso" type="number" min="0" step="any" placeholder="Ej. 15">
+<input id="weight" type="number" min="0" step="any" placeholder="Ej. 15">
 <label>Dosis indicada (mg/kg/dosis)</label>
-<input id="dosis" type="number" min="0" step="any" placeholder="Ej. 10">
-<button onclick="pediatria()">Calcular dosis</button>
-<div class="result" id="r2">Resultado: pendiente</div>
+<input id="dose" type="number" min="0" step="any" placeholder="Ej. 10">
+<button class="action" onclick="pediatric()">CALCULAR DOSIS</button>
+<div class="result" id="pediatricResult">Resultado: pendiente</div>
 </div>
 
 <div class="card">
-<h2>3. Líquidos de mantenimiento</h2>
+<h2>Dosis por día dividida</h2>
 <label>Peso (kg)</label>
-<input id="pesoL" type="number" min="0" step="any" placeholder="Ej. 20">
-<button onclick="liquidos()">Calcular mantenimiento</button>
-<div class="result" id="r3">Resultado: pendiente</div>
-<small>Estimación teórica por Holliday-Segar. No sustituye la valoración clínica.</small>
+<input id="weightDay" type="number" min="0" step="any" placeholder="Ej. 15">
+<label>Dosis indicada (mg/kg/día)</label>
+<input id="doseDay" type="number" min="0" step="any" placeholder="Ej. 30">
+<label>Número de dosis al día</label>
+<input id="frequency" type="number" min="1" step="1" placeholder="Ej. 3">
+<button class="action" onclick="dailyDose()">CALCULAR DOSIS</button>
+<div class="result" id="dailyResult">Resultado: pendiente</div>
+<p class="note">Estos cálculos realizan únicamente operaciones matemáticas sobre la dosis que introduce el profesional. No seleccionan ni validan una pauta terapéutica.</p>
 </div>
+</section>
+
+<section id="fluids" class="section">
+<div class="card">
+<h2>Líquidos de mantenimiento</h2>
+<label>Peso del paciente (kg)</label>
+<input id="fluidWeight" type="number" min="0" step="any" placeholder="Ej. 20">
+<button class="action" onclick="fluids()">CALCULAR MANTENIMIENTO</button>
+<div class="result" id="fluidResult">Resultado: pendiente</div>
+<p class="note">Estimación teórica mediante Holliday-Segar. No incluye déficit, pérdidas continuas ni ajustes por patologías. La prescripción requiere valoración clínica.</p>
+</div>
+</section>
+
+<section id="neonatal" class="section">
+<div class="card">
+<h2>Ficha neonatal</h2>
+<label>Peso al nacer (kg)</label>
+<input id="birthWeight" type="number" min="0" step="any" placeholder="Ej. 3.2">
+<label>Peso actual (kg)</label>
+<input id="currentWeight" type="number" min="0" step="any" placeholder="Ej. 3.0">
+<button class="action" onclick="neonatal()">CALCULAR VARIACIÓN DE PESO</button>
+<div class="result" id="neoResult">Resultado: pendiente</div>
+<p class="note">Herramienta de cálculo de variación ponderal. No calcula automáticamente requerimientos de líquidos ni dosis neonatales.</p>
+</div>
+</section>
+
+<div class="card">
+<h2>Seguridad clínica</h2>
+<p class="note">CMP Cal es una herramienta auxiliar de cálculo. Antes de administrar un medicamento, verifica indicación, dosis máxima, edad, peso, intervalo, función renal y hepática, presentación, concentración, dilución y vía de administración en fuentes clínicas confiables.</p>
+</div>
+</main>
+
+<footer>
+CMP Cal · Herramienta de apoyo clínico<br>
+Verificar los resultados antes de utilizarlos en pacientes.
+</footer>
 
 <script>
-function n(id){return Number(document.getElementById(id).value)}
-function convertir(){
-let mg=n('mg'),c=n('conc'),v=n('vol');
-if(mg<=0||c<=0||v<=0){r1.textContent='Introduce valores válidos';return}
-r1.textContent='Volumen: '+(mg/(c/v)).toFixed(2)+' mL (cc)';
+function val(id){return Number(document.getElementById(id).value)}
+function out(id,text){document.getElementById(id).textContent=text}
+function valid(values){return values.every(x=>Number.isFinite(x)&&x>0)}
+
+function show(id,button){
+document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
+document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+button.classList.add('active');
 }
-function pediatria(){
-let p=n('peso'),d=n('dosis');
-if(p<=0||d<=0){r2.textContent='Introduce valores válidos';return}
-r2.textContent='Cantidad calculada: '+(p*d).toFixed(2)+' mg por dosis';
+
+function convert(){
+let mg=val('mg'),c=val('concentration'),v=val('reference');
+if(!valid([mg,c,v]))return out('conversionResult','Introduce valores mayores que cero.');
+let result=mg/(c/v);
+out('conversionResult','Volumen calculado: '+result.toFixed(3)+' mL (cc)');
 }
-function liquidos(){
-let p=n('pesoL'),total=0;
-if(p<=0){r3.textContent='Introduce un peso válido';return}
-if(p<=10)total=p*100;
-else if(p<=20)total=1000+(p-10)*50;
-else total=1500+(p-20)*20;
-r3.textContent='Mantenimiento estimado: '+total+' mL/24 h ('+(total/24).toFixed(1)+' mL/h)';
+
+function pediatric(){
+let w=val('weight'),d=val('dose');
+if(!valid([w,d]))return out('pediatricResult','Introduce valores mayores que cero.');
+out('pediatricResult','Cantidad matemática: '+(w*d).toFixed(3)+' mg por dosis.');
+}
+
+function dailyDose(){
+let w=val('weightDay'),d=val('doseDay'),f=val('frequency');
+if(!valid([w,d,f])||!Number.isInteger(f))
+return out('dailyResult','Verifica peso, dosis y número entero de dosis.');
+let total=w*d;
+out('dailyResult','Total diario: '+total.toFixed(2)+' mg. Cada dosis: '+(total/f).toFixed(2)+' mg ('+f+' dosis/día).');
+}
+
+function fluids(){
+let w=val('fluidWeight');
+if(!valid([w]))return out('fluidResult','Introduce un peso válido.');
+let total;
+if(w<=10)total=w*100;
+else if(w<=20)total=1000+(w-10)*50;
+else total=1500+(w-20)*20;
+out('fluidResult','Volumen teórico: '+total.toFixed(1)+' mL/24 h. Promedio horario: '+(total/24).toFixed(1)+' mL/h.');
+}
+
+function neonatal(){
+let b=val('birthWeight'),c=val('currentWeight');
+if(!valid([b,c]))return out('neoResult','Introduce ambos pesos.');
+let change=((c-b)/b)*100;
+out('neoResult','Variación ponderal: '+change.toFixed(2)+' %. Diferencia: '+(c-b).toFixed(3)+' kg.');
 }
 </script>
 </body>
