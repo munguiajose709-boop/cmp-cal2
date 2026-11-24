@@ -5,168 +5,320 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
-<title>CMP Cal</title>
+<title>CMP Cal 2.1</title>
 <style>
+:root {
+  --blue:#1769aa;
+  --blue-light:#eaf4fc;
+  --bg:#f5f7fa;
+  --text:#172b3a;
+  --muted:#64748b;
+  --border:#e1e8ef;
+  --white:#fff;
+}
 *{box-sizing:border-box}
-body{margin:0;background:#f5f8fc;color:#263548;font-family:Arial,sans-serif}
-header{background:white;padding:24px 18px 18px;border-bottom:1px solid #e5edf5}
-header h1{margin:0;color:#1676b8;font-size:29px}
-header p{margin:6px 0 0;color:#718096;font-size:12px}
-main{padding:16px;max-width:650px;margin:auto}
-.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
-.menu button{background:white;color:#2876ae;border:1px solid #dce8f3;padding:14px 8px;border-radius:12px;font-size:13px;font-weight:bold;margin:0}
-.menu button.active{background:#e8f3fc;border:2px solid #2985c3}
-.card{background:white;padding:19px;border:1px solid #e5edf5;border-radius:15px;margin-bottom:15px}
-.card h2{font-size:18px;color:#1676b8;margin:0 0 15px}
-label{display:block;font-size:13px;color:#526477;margin:13px 0 6px}
-input{width:100%;padding:13px;border:1px solid #d6e0ea;border-radius:9px;font-size:16px;background:#fbfdff;color:#263548}
-.action{width:100%;padding:14px;background:#1676b8;color:white;border:0;border-radius:10px;font-size:15px;font-weight:bold;margin-top:17px}
-.result{background:#edf6fd;border-radius:10px;padding:15px;margin-top:15px;color:#176ca7;font-size:17px;font-weight:bold;overflow-wrap:anywhere}
-.note{font-size:12px;color:#748398;line-height:1.5;margin-top:12px}
-.section{display:none}
-.section.active{display:block}
-footer{text-align:center;color:#8493a4;font-size:11px;padding:20px}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+header{
+  background:white;padding:22px 18px 15px;
+  border-bottom:1px solid var(--border);
+}
+.header-inner{max-width:850px;margin:auto}
+.brand{font-size:25px;font-weight:800;color:var(--blue)}
+.subtitle{font-size:13px;color:var(--muted);margin-top:4px}
+main{max-width:850px;margin:auto;padding:16px}
+.tabs{
+  display:flex;gap:8px;overflow-x:auto;padding:4px 0 14px;
+}
+.tab{
+  border:1px solid var(--border);background:white;color:var(--text);
+  border-radius:10px;padding:10px 14px;white-space:nowrap;
+  font-size:13px;font-weight:650;cursor:pointer;
+}
+.tab.active{background:var(--blue);color:white;border-color:var(--blue)}
+.panel{display:none}
+.panel.active{display:block}
+.card{
+  background:white;border:1px solid var(--border);
+  border-radius:15px;padding:17px;margin-bottom:13px;
+}
+h2{font-size:19px;margin:0 0 7px}
+h3{font-size:15px;margin:0 0 8px}
+p{line-height:1.5}
+.muted{color:var(--muted);font-size:13px}
+label{display:block;font-size:13px;font-weight:650;margin:13px 0 6px}
+input,select{
+  width:100%;padding:12px;border:1px solid #cbd5e1;
+  border-radius:9px;background:white;font-size:16px;color:var(--text);
+}
+button.primary{
+  width:100%;border:0;border-radius:10px;padding:13px;
+  background:var(--blue);color:white;font-size:15px;
+  font-weight:700;margin-top:14px;cursor:pointer;
+}
+.result{
+  background:var(--blue-light);border-radius:10px;
+  padding:14px;margin-top:13px;font-weight:700;
+  color:#124c7d;display:none;line-height:1.5;
+}
+.notice{
+  background:#fff8e7;border:1px solid #f1dfb4;
+  padding:12px;border-radius:10px;font-size:12px;
+  line-height:1.5;margin:12px 0;
+}
+.search{margin:12px 0}
+.med-item{
+  border:1px solid var(--border);border-radius:11px;
+  padding:13px;margin-top:9px;background:white;cursor:pointer;
+}
+.med-item strong{display:block;font-size:15px}
+.med-item small{color:var(--muted)}
+.tag{
+  display:inline-block;background:#edf2f7;color:#475569;
+  border-radius:20px;padding:4px 8px;font-size:11px;margin-top:7px;
+}
+.detail{display:none}
+.back{
+  border:0;background:var(--blue-light);color:var(--blue);
+  padding:9px 12px;border-radius:8px;font-weight:700;margin-bottom:14px;
+}
+footer{
+  text-align:center;color:var(--muted);font-size:11px;
+  padding:20px 10px 30px;
+}
 </style>
 </head>
 <body>
 
 <header>
-<h1>CMP Cal</h1>
-<p>CALCULADORA MÉDICA CLÍNICA · VERSIÓN 2.0</p>
+  <div class="header-inner">
+    <div class="brand">CMP Cal</div>
+    <div class="subtitle">Calculadora médica · Versión 2.1</div>
+  </div>
 </header>
 
 <main>
-<div class="menu">
-<button class="active" onclick="show('conversion',this)">⚖️ MG ↔ ML</button>
-<button onclick="show('pediatric',this)">👶 Pediatría</button>
-<button onclick="show('fluids',this)">💧 Líquidos</button>
-<button onclick="show('neonatal',this)">🍼 Neonatología</button>
-</div>
+<nav class="tabs">
+  <button class="tab active" data-panel="conversion">mg ↔ mL</button>
+  <button class="tab" data-panel="pediatria">Pediatría</button>
+  <button class="tab" data-panel="liquidos">Líquidos</button>
+  <button class="tab" data-panel="neonatal">Neonatal</button>
+  <button class="tab" data-panel="medicamentos">Medicamentos</button>
+</nav>
 
-<section id="conversion" class="section active">
-<div class="card">
-<h2>Conversor de mg a mL (cc)</h2>
-<label>Cantidad requerida (mg)</label>
-<input id="mg" type="number" min="0" step="any" placeholder="Ej. 120">
-<label>Concentración (mg)</label>
-<input id="concentration" type="number" min="0" step="any" placeholder="Ej. 120">
-<label>Volumen de referencia (mL)</label>
-<input id="reference" type="number" min="0" step="any" value="5">
-<button class="action" onclick="convert()">CALCULAR VOLUMEN</button>
-<div class="result" id="conversionResult">Resultado: pendiente</div>
-<p class="note">Introduce la concentración tal como aparece en el medicamento. 1 mL equivale a 1 cc.</p>
-</div>
+<section id="conversion" class="panel active">
+  <div class="card">
+    <h2>Conversión de mg a mL</h2>
+    <p class="muted">Calcula el volumen correspondiente según la concentración del medicamento.</p>
+    <label>Dosis indicada (mg)</label>
+    <input id="mg" type="number" min="0" step="any" placeholder="Ej. 120">
+    <label>Concentración: cantidad (mg)</label>
+    <input id="concMg" type="number" min="0" step="any" placeholder="Ej. 120">
+    <label>Volumen de esa concentración (mL)</label>
+    <input id="concMl" type="number" min="0" step="any" placeholder="Ej. 5">
+    <button class="primary" onclick="convertir()">Calcular volumen</button>
+    <div class="result" id="resConversion"></div>
+  </div>
 </section>
 
-<section id="pediatric" class="section">
-<div class="card">
-<h2>Calculadora de dosis pediátrica</h2>
-<label>Peso del paciente (kg)</label>
-<input id="weight" type="number" min="0" step="any" placeholder="Ej. 15">
-<label>Dosis indicada (mg/kg/dosis)</label>
-<input id="dose" type="number" min="0" step="any" placeholder="Ej. 10">
-<button class="action" onclick="pediatric()">CALCULAR DOSIS</button>
-<div class="result" id="pediatricResult">Resultado: pendiente</div>
-</div>
-
-<div class="card">
-<h2>Dosis por día dividida</h2>
-<label>Peso (kg)</label>
-<input id="weightDay" type="number" min="0" step="any" placeholder="Ej. 15">
-<label>Dosis indicada (mg/kg/día)</label>
-<input id="doseDay" type="number" min="0" step="any" placeholder="Ej. 30">
-<label>Número de dosis al día</label>
-<input id="frequency" type="number" min="1" step="1" placeholder="Ej. 3">
-<button class="action" onclick="dailyDose()">CALCULAR DOSIS</button>
-<div class="result" id="dailyResult">Resultado: pendiente</div>
-<p class="note">Estos cálculos realizan únicamente operaciones matemáticas sobre la dosis que introduce el profesional. No seleccionan ni validan una pauta terapéutica.</p>
-</div>
+<section id="pediatria" class="panel">
+  <div class="card">
+    <h2>Calculadora pediátrica</h2>
+    <p class="muted">Calcula una dosis a partir de la pauta previamente seleccionada y validada por el profesional.</p>
+    <label>Peso del paciente (kg)</label>
+    <input id="pesoPed" type="number" min="0" step="any" placeholder="Ej. 12">
+    <label>Dosis prescrita</label>
+    <input id="dosisPed" type="number" min="0" step="any" placeholder="Ej. 10">
+    <label>Unidad de dosis</label>
+    <select id="tipoDosis">
+      <option value="dosis">mg/kg/dosis</option>
+      <option value="dia">mg/kg/día</option>
+    </select>
+    <label>Número de dosis al día</label>
+    <input id="frecuenciaPed" type="number" min="1" step="1" value="3">
+    <button class="primary" onclick="calcularPed()">Calcular dosis</button>
+    <div class="result" id="resPed"></div>
+    <div class="notice">Esta calculadora no selecciona medicamentos ni determina pautas terapéuticas. Verifica indicación, edad, dosis máxima, intervalo y ajustes antes de utilizar el resultado.</div>
+  </div>
 </section>
 
-<section id="fluids" class="section">
-<div class="card">
-<h2>Líquidos de mantenimiento</h2>
-<label>Peso del paciente (kg)</label>
-<input id="fluidWeight" type="number" min="0" step="any" placeholder="Ej. 20">
-<button class="action" onclick="fluids()">CALCULAR MANTENIMIENTO</button>
-<div class="result" id="fluidResult">Resultado: pendiente</div>
-<p class="note">Estimación teórica mediante Holliday-Segar. No incluye déficit, pérdidas continuas ni ajustes por patologías. La prescripción requiere valoración clínica.</p>
-</div>
+<section id="liquidos" class="panel">
+  <div class="card">
+    <h2>Líquidos de mantenimiento</h2>
+    <p class="muted">Estimación teórica mediante Holliday-Segar.</p>
+    <label>Peso (kg)</label>
+    <input id="pesoLiq" type="number" min="0" step="any" placeholder="Ej. 18">
+    <button class="primary" onclick="calcularLiq()">Calcular mantenimiento</button>
+    <div class="result" id="resLiq"></div>
+    <div class="notice">Es una estimación de mantenimiento, no una prescripción automática. Valora edad, estado clínico, función renal y cardíaca, electrolitos, pérdidas y riesgo de hiponatremia.</div>
+  </div>
 </section>
 
-<section id="neonatal" class="section">
-<div class="card">
-<h2>Ficha neonatal</h2>
-<label>Peso al nacer (kg)</label>
-<input id="birthWeight" type="number" min="0" step="any" placeholder="Ej. 3.2">
-<label>Peso actual (kg)</label>
-<input id="currentWeight" type="number" min="0" step="any" placeholder="Ej. 3.0">
-<button class="action" onclick="neonatal()">CALCULAR VARIACIÓN DE PESO</button>
-<div class="result" id="neoResult">Resultado: pendiente</div>
-<p class="note">Herramienta de cálculo de variación ponderal. No calcula automáticamente requerimientos de líquidos ni dosis neonatales.</p>
-</div>
+<section id="neonatal" class="panel">
+  <div class="card">
+    <h2>Ficha neonatal</h2>
+    <p class="muted">Seguimiento de variación ponderal. Módulo independiente de las dosis pediátricas.</p>
+    <label>Peso al nacimiento (g)</label>
+    <input id="pesoNac" type="number" min="1" placeholder="Ej. 3200">
+    <label>Peso actual (g)</label>
+    <input id="pesoAct" type="number" min="1" placeholder="Ej. 3000">
+    <button class="primary" onclick="calcularNeo()">Calcular variación</button>
+    <div class="result" id="resNeo"></div>
+    <div class="notice">La variación ponderal debe interpretarse según edad posnatal, edad gestacional, alimentación, hidratación y evaluación clínica. No es una calculadora de dosis neonatales.</div>
+  </div>
 </section>
 
-<div class="card">
-<h2>Seguridad clínica</h2>
-<p class="note">CMP Cal es una herramienta auxiliar de cálculo. Antes de administrar un medicamento, verifica indicación, dosis máxima, edad, peso, intervalo, función renal y hepática, presentación, concentración, dilución y vía de administración en fuentes clínicas confiables.</p>
-</div>
-</main>
+<section id="medicamentos" class="panel">
+  <div class="card">
+    <h2>Catálogo de medicamentos</h2>
+    <p class="muted">Buscador de fichas farmacológicas. Selecciona un medicamento para consultar su estado de información.</p>
+    <input class="search" id="buscarMed" type="search" placeholder="Buscar medicamento..." oninput="filtrarMedicamentos()">
+    <div id="listaMedicamentos"></div>
+    <div id="detalleMedicamento" class="detail">
+      <button class="back" onclick="volverCatalogo()">← Volver al catálogo</button>
+      <h2 id="nombreDetalle"></h2>
+      <p id="grupoDetalle" class="muted"></p>
+      <div class="notice" id="estadoDetalle"></div>
+      <h3>Información de la ficha</h3>
+      <p id="descripcionDetalle"></p>
+      <h3>Datos pendientes de validación</h3>
+      <ul>
+        <li>Presentaciones y concentraciones disponibles localmente.</li>
+        <li>Indicaciones y vías de administración.</li>
+        <li>Dosis por indicación y grupo etario.</li>
+        <li>Dosis máxima e intervalo.</li>
+        <li>Ajustes renales y hepáticos.</li>
+        <li>Reconstitución, dilución y velocidad de administración.</li>
+        <li>Contraindicaciones, precauciones e interacciones.</li>
+      </ul>
+      <p class="muted">No se muestran pautas terapéuticas hasta contar con fuentes confiables y aplicables.</p>
+    </div>
+  </div>
+</section>
 
 <footer>
-CMP Cal · Herramienta de apoyo clínico<br>
-Verificar los resultados antes de utilizarlos en pacientes.
+  CMP Cal 2.1 · Herramienta auxiliar de cálculo clínico<br>
+  No sustituye protocolos institucionales ni juicio clínico.
 </footer>
+</main>
 
 <script>
-function val(id){return Number(document.getElementById(id).value)}
-function out(id,text){document.getElementById(id).textContent=text}
-function valid(values){return values.every(x=>Number.isFinite(x)&&x>0)}
+const tabs=document.querySelectorAll(".tab");
+const panels=document.querySelectorAll(".panel");
 
-function show(id,button){
-document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
-document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-button.classList.add('active');
+tabs.forEach(tab=>{
+  tab.addEventListener("click",()=>{
+    tabs.forEach(t=>t.classList.remove("active"));
+    panels.forEach(p=>p.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById(tab.dataset.panel).classList.add("active");
+  });
+});
+
+function mostrar(id,texto){
+  const el=document.getElementById(id);
+  el.style.display="block";
+  el.textContent=texto;
+}
+function numero(id){
+  return Number(document.getElementById(id).value);
+}
+function convertir(){
+  const mg=numero("mg"), cmg=numero("concMg"), cml=numero("concMl");
+  if(mg<=0||cmg<=0||cml<=0) return alert("Introduce valores mayores que cero.");
+  const resultado=(mg*cml)/cmg;
+  mostrar("resConversion",`Volumen calculado: ${resultado.toFixed(2)} mL`);
+}
+function calcularPed(){
+  const peso=numero("pesoPed"), dosis=numero("dosisPed");
+  const frecuencia=numero("frecuenciaPed");
+  const tipo=document.getElementById("tipoDosis").value;
+  if(peso<=0||dosis<=0||frecuencia<=0) return alert("Verifica los datos ingresados.");
+  if(!Number.isInteger(frecuencia)) return alert("Introduce un número entero de dosis al día.");
+  let resultado;
+  if(tipo==="dosis"){
+    resultado=peso*dosis;
+    mostrar("resPed",`Dosis calculada: ${resultado.toFixed(2)} mg por dosis.`);
+  }else{
+    resultado=(peso*dosis)/frecuencia;
+    mostrar("resPed",`Dosis diaria total: ${(peso*dosis).toFixed(2)} mg/día. Dosis por administración: ${resultado.toFixed(2)} mg.`);
+  }
+}
+function calcularLiq(){
+  const peso=numero("pesoLiq");
+  if(peso<=0) return alert("Introduce un peso válido.");
+  let ml;
+  if(peso<=10) ml=peso*100;
+  else if(peso<=20) ml=1000+(peso-10)*50;
+  else ml=1500+(peso-20)*20;
+  mostrar("resLiq",`Mantenimiento teórico: ${ml.toFixed(0)} mL/24 h. Ritmo horario aproximado: ${(ml/24).toFixed(1)} mL/h.`);
+}
+function calcularNeo(){
+  const nacimiento=numero("pesoNac"), actual=numero("pesoAct);
+  if(nacimiento<=0||actual<=0) return alert("Introduce ambos pesos correctamente.");
+  const variacion=((actual-nacimiento)/nacimiento)*100;
+  const diferencia=actual-nacimiento;
+  mostrar("resNeo",`Variación: ${variacion.toFixed(2)}%. Diferencia: ${diferencia.toFixed(0)} g. ${variacion<0?"Pérdida ponderal respecto al nacimiento.":variacion>0?"Ganancia ponderal respecto al nacimiento.":"Sin variación."}`);
 }
 
-function convert(){
-let mg=val('mg'),c=val('concentration'),v=val('reference');
-if(!valid([mg,c,v]))return out('conversionResult','Introduce valores mayores que cero.');
-let result=mg/(c/v);
-out('conversionResult','Volumen calculado: '+result.toFixed(3)+' mL (cc)');
-}
+const medicamentos=[
+ {nombre:"Amoxicilina",grupo:"Antibiótico · Penicilina",desc:"Antibiótico betalactámico. La ficha debe diferenciar indicación, formulación y grupo etario."},
+ {nombre:"Ceftriaxona",grupo:"Antibiótico · Cefalosporina",desc:"Cefalosporina de tercera generación. Requiere especial atención a las restricciones neonatales y compatibilidad con soluciones que contienen calcio."},
+ {nombre:"Cefotaxima",grupo:"Antibiótico · Cefalosporina",desc:"Cefalosporina de tercera generación. La información debe diferenciar población neonatal y pediátrica."},
+ {nombre:"Ampicilina",grupo:"Antibiótico · Penicilina",desc:"Antibiótico betalactámico. Presentación, vía e indicación deben validarse antes de incorporar pautas."},
+ {nombre:"Gentamicina",grupo:"Antibiótico · Aminoglucósido",desc:"Aminoglucósido. Requiere atención a función renal, monitorización y características del paciente."},
+ {nombre:"Paracetamol / Acetaminofén",grupo:"Analgésico y antipirético",desc:"Analgésico y antipirético. Deben diferenciarse formulaciones, vías, dosis máxima y riesgo de toxicidad hepática."},
+ {nombre:"Ibuprofeno",grupo:"Analgésico · Antiinflamatorio",desc:"Antiinflamatorio no esteroideo. Deben verificarse edad, hidratación, función renal y contraindicaciones."},
+ {nombre:"Metamizol",grupo:"Analgésico y antipirético",desc:"Analgésico y antipirético. Se requiere validar normativa local, formulación, indicación y advertencias de seguridad."},
+ {nombre:"Ondansetrón",grupo:"Antiemético",desc:"Antagonista de receptores serotoninérgicos 5-HT3. Deben verificarse indicación, edad, vía y precauciones cardíacas."},
+ {nombre:"Dimenhidrinato",grupo:"Antiemético · Antihistamínico",desc:"Antihistamínico con efecto antiemético. Deben verificarse edad, formulación y efectos sedantes."},
+ {nombre:"Dexametasona",grupo:"Corticoide",desc:"Glucocorticoide. La pauta depende de la indicación y del contexto clínico."},
+ {nombre:"Hidrocortisona",grupo:"Corticoide",desc:"Glucocorticoide. Deben diferenciarse las presentaciones y las indicaciones de uso."},
+ {nombre:"Diazepam",grupo:"Anticonvulsivante · Benzodiacepina",desc:"Benzodiacepina. Requiere precauciones por depresión respiratoria, vía de administración y monitorización."},
+ {nombre:"Fenobarbital",grupo:"Anticonvulsivante · Barbitúrico",desc:"Anticonvulsivante. Deben validarse dosis de carga y mantenimiento por separado, además de monitorización."},
+ {nombre:"Levetiracetam",grupo:"Anticonvulsivante",desc:"Anticonvulsivante. Deben verificarse indicación, edad, vía y ajustes según función renal."}
+];
 
-function pediatric(){
-let w=val('weight'),d=val('dose');
-if(!valid([w,d]))return out('pediatricResult','Introduce valores mayores que cero.');
-out('pediatricResult','Cantidad matemática: '+(w*d).toFixed(3)+' mg por dosis.');
+function crearLista(datos){
+ const lista=document.getElementById("listaMedicamentos");
+ lista.innerHTML="";
+ if(!datos.length){lista.innerHTML='<p class="muted">No se encontraron medicamentos.</p>';return;}
+ datos.forEach((med)=>{
+  const item=document.createElement("div");
+  item.className="med-item";
+  const nombre=document.createElement("strong");
+  nombre.textContent=med.nombre;
+  const grupo=document.createElement("small");
+  grupo.textContent=med.grupo;
+  const tag=document.createElement("div");
+  tag.className="tag";
+  tag.textContent="Ficha informativa en revisión";
+  item.append(nombre,grupo,tag);
+  item.addEventListener("click",()=>abrirMedicamento(med));
+  lista.appendChild(item);
+ });
 }
-
-function dailyDose(){
-let w=val('weightDay'),d=val('doseDay'),f=val('frequency');
-if(!valid([w,d,f])||!Number.isInteger(f))
-return out('dailyResult','Verifica peso, dosis y número entero de dosis.');
-let total=w*d;
-out('dailyResult','Total diario: '+total.toFixed(2)+' mg. Cada dosis: '+(total/f).toFixed(2)+' mg ('+f+' dosis/día).');
+function filtrarMedicamentos(){
+ const q=document.getElementById("buscarMed").value.toLowerCase().trim();
+ crearLista(medicamentos.filter(m=>(m.nombre+" "+m.grupo).toLowerCase().includes(q)));
 }
-
-function fluids(){
-let w=val('fluidWeight');
-if(!valid([w]))return out('fluidResult','Introduce un peso válido.');
-let total;
-if(w<=10)total=w*100;
-else if(w<=20)total=1000+(w-10)*50;
-else total=1500+(w-20)*20;
-out('fluidResult','Volumen teórico: '+total.toFixed(1)+' mL/24 h. Promedio horario: '+(total/24).toFixed(1)+' mL/h.');
+function abrirMedicamento(med){
+ document.getElementById("listaMedicamentos").style.display="none";
+ document.getElementById("buscarMed").style.display="none";
+ document.getElementById("detalleMedicamento").style.display="block";
+ document.getElementById("nombreDetalle").textContent=med.nombre;
+ document.getElementById("grupoDetalle").textContent=med.grupo;
+ document.getElementById("descripcionDetalle").textContent=med.desc;
+ document.getElementById("estadoDetalle").textContent="Ficha informativa en revisión. No contiene dosis autorizadas para prescripción. La información farmacológica debe validarse con fuentes oficiales y presentaciones disponibles en Nicaragua.";
 }
-
-function neonatal(){
-let b=val('birthWeight'),c=val('currentWeight');
-if(!valid([b,c]))return out('neoResult','Introduce ambos pesos.');
-let change=((c-b)/b)*100;
-out('neoResult','Variación ponderal: '+change.toFixed(2)+' %. Diferencia: '+(c-b).toFixed(3)+' kg.');
+function volverCatalogo(){
+ document.getElementById("listaMedicamentos").style.display="block";
+ document.getElementById("buscarMed").style.display="block";
+ document.getElementById("detalleMedicamento").style.display="none";
 }
+crearLista(medicamentos);
 </script>
 </body>
 </html>
